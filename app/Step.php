@@ -17,4 +17,9 @@ class Step extends Model
     		$step->uuid = Str::uuid();
     	});
     }
+
+    public function getRouteKeyName ()
+    {
+    	return 'uuid';
+    }
 }

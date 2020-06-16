@@ -11,7 +11,7 @@ class SnippetController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware(['auth:api'])->only('store');
+		$this->middleware(['auth:api'])->except('show');
 	} 
 
 	public function show(Snippet $snippet)
@@ -23,6 +23,19 @@ class SnippetController extends Controller
     public function store(Request $request)
     {
     	$snippet = $request->user()->snippets()->create();
+
+    	return new SnippetResource($snippet);
+    }
+
+    public function update(Request $request, Snippet $snippet)
+    {
+    	//authorize
+
+    	$request->validate([
+    		'title' => 'nullable'
+    	]);
+    	
+    	$snippet->update($request->only('title'));
 
     	return new SnippetResource($snippet);
     }
