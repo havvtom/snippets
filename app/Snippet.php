@@ -40,4 +40,9 @@ class Snippet extends Model
     {
     	return 'uuid';
     }
+
+    public function isPublic()
+    {
+        return $this->is_public;
+    }
 }

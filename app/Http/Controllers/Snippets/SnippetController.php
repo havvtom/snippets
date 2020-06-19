@@ -16,7 +16,8 @@ class SnippetController extends Controller
 
 	public function show(Snippet $snippet)
 	{
-		//authorize
+		$this->authorize('show', $snippet);
+
 		return new SnippetResource($snippet);
 	}
 
@@ -29,13 +30,14 @@ class SnippetController extends Controller
 
     public function update(Request $request, Snippet $snippet)
     {
-    	//authorize
+    	$this->authorize('update', $snippet);
 
     	$request->validate([
-    		'title' => 'nullable'
+    		'title' => 'nullable',
+    		'is_public' => 'nullable|boolean'
     	]);
     	
-    	$snippet->update($request->only('title'));
+    	$snippet->update($request->only('title', 'is_public'));
 
     	return new SnippetResource($snippet);
     }

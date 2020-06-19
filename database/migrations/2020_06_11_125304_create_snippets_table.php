@@ -18,6 +18,7 @@ class CreateSnippetsTable extends Migration
             $table->bigInteger('user_id')->unsigned()->index();
             $table->uuid('uuid');
             $table->string('title')->nullable();
+            $table->boolean('is_public')->default(false);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
