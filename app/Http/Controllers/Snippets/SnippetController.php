@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Snippet;
 use App\Http\Resources\SnippetResource;
+use App\Http\Resources\SnippetCollection;
 
 class SnippetController extends Controller
 {
@@ -13,6 +14,11 @@ class SnippetController extends Controller
 	{
 		$this->middleware(['auth:api'])->except('show');
 	} 
+
+	public function index (Request $request)
+	{
+		return new SnippetCollection(Snippet::take($request->get('limit', 10))->latest()->public()->get());
+	}
 
 	public function show(Snippet $snippet)
 	{
@@ -40,5 +46,12 @@ class SnippetController extends Controller
     	$snippet->update($request->only('title', 'is_public'));
 
     	return new SnippetResource($snippet);
+    }
+
+    public function destroy(Snippet $snippet)
+    {
+        $this->authorize('update', $snippet);
+        
+        $snippet->delete();
     }
 }
