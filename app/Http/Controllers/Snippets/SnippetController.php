@@ -12,7 +12,7 @@ class SnippetController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware(['auth:api'])->except('show');
+		$this->middleware(['auth:api'])->except(['show', 'index']);
 	} 
 
 	public function index (Request $request)

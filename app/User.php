@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Support\Facades\Hash;
 use App\Snippet;
 
 class User extends Authenticatable implements JWTSubject
@@ -18,7 +19,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'username'
     ];
 
     /**
@@ -44,6 +45,14 @@ class User extends Authenticatable implements JWTSubject
         return $this->getKey();
     }
 
+    public function setPasswordAttribute($password)
+    {
+        if(trim($password) === ''){
+            return;
+        }
+
+        $this->attributes['password'] = Hash::make($password);
+    }
     
     public function getJWTCustomClaims()
     {
@@ -53,5 +62,10 @@ class User extends Authenticatable implements JWTSubject
     public function snippets()
     {
         return $this->hasMany(Snippet::class)->latest();
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'username';
     }
 }
